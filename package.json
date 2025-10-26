@@ -5,13 +5,13 @@
   "packageManager": "pnpm@10.11.0",
   "description": "",
   "license": "MIT",
-  "homepage": "https://github.com/antfu/unplugin-agent-sync#readme",
+  "homepage": "https://github.com/bee1an/unplugin-agent-sync#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/unplugin-agent-sync.git"
+    "url": "git+https://github.com/bee1an/unplugin-agent-sync.git"
   },
   "bugs": {
-    "url": "https://github.com/antfu/unplugin-agent-sync/issues"
+    "url": "https://github.com/bee1an/unplugin-agent-sync/issues"
   },
   "keywords": [
     "unplugin",
@@ -55,7 +55,8 @@
     "prepublishOnly": "npm run build",
     "release": "bumpp && pnpm publish",
     "start": "tsx src/index.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "@farmfe/core": ">=1",

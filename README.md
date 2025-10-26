@@ -2,66 +2,113 @@
 
 [![NPM version](https://img.shields.io/npm/v/unplugin-agent-sync?color=a1b858&label=)](https://www.npmjs.com/package/unplugin-agent-sync)
 
-Starter template for [unplugin](https://github.com/unjs/unplugin).
+一个基于unplugin的AI代理文件同步工具，用于在多个AI助手配置文件间保持内容一致。
 
-## Template Usage
+## 功能特性
 
-To use this template, clone it down using:
+- 🔄 **文件同步**：自动将源文件内容同步到多个目标AI代理文件
+- 👀 **实时监听**：监听源文件变化，自动触发同步操作
+- 🔧 **灵活配置**：支持自定义源文件和目标文件数组
+- 🛠️ **多构建工具支持**：基于unplugin，支持Vite、Webpack、Rollup等
+- 📦 **TypeScript支持**：完整的类型定义和开发体验
 
-```bash
-npx degit unplugin/unplugin-agent-sync my-unplugin
-```
+## 核心功能
 
-And do a global replacement of `unplugin-agent-sync` with your plugin name.
+### AI代理文件同步
 
-Then you can start developing your unplugin 🔥
+当您使用多个AI助手（如Claude、Qwen、GPT等）时，通常需要为每个助手维护相似的配置文件。本插件可以：
 
-To test your plugin, run: `pnpm run dev`
-To release a new version, run: `pnpm run release`
+1. **自动同步**：当`AGENTS.md`文件修改后，自动更新其他AI代理文件
+2. **实时监听**：支持文件变化监听，无需手动触发
+3. **灵活配置**：可以指定任意目标文件数组
 
-## Install
+## 安装
 
 ```bash
 npm i unplugin-agent-sync
 ```
+
+## 快速开始
+
+### 基本使用
+
+```typescript
+import UnpluginAgentSync from 'unplugin-agent-sync/vite'
+
+export default defineConfig({
+  plugins: [
+    UnpluginAgentSync({
+      sourceFile: 'AGENTS.md', // 源文件
+      agentFiles: ['CLAUDE.md', 'QWEN.md'], // 目标文件数组
+      watchMode: true // 启用自动监听
+    })
+  ]
+})
+```
+
+### 手动同步
+
+```typescript
+import UnpluginAgentSync from 'unplugin-agent-sync'
+
+const plugin = UnpluginAgentSync({
+  sourceFile: 'AGENTS.md',
+  agentFiles: ['CLAUDE.md', 'QWEN.md']
+})
+
+// 手动执行同步
+await plugin.api.sync()
+```
+
+## 配置选项
+
+| 选项 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `sourceFile` | `string` | `'AGENTS.md'` | 源文件路径，相对于项目根目录 |
+| `agentFiles` | `string[]` | `[]` | 需要同步的目标AI代理文件数组 |
+| `watchMode` | `boolean` | `false` | 是否启用自动监听文件变化 |
+
+## 构建工具集成
 
 <details>
 <summary>Vite</summary><br>
 
 ```ts
 // vite.config.ts
-import Starter from 'unplugin-agent-sync/vite'
+import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 
 export default defineConfig({
   plugins: [
-    Starter({
-      /* options */
+    UnpluginAgentSync({
+      sourceFile: 'AGENTS.md',
+      agentFiles: ['CLAUDE.md', 'QWEN.md'],
+      watchMode: true
     })
   ]
 })
 ```
 
-Example: [`playground/`](./playground/)
-
-<br></details>
+</details>
 
 <details>
 <summary>Rollup</summary><br>
 
 ```ts
 // rollup.config.js
-import Starter from 'unplugin-agent-sync/rollup'
+import UnpluginAgentSync from 'unplugin-agent-sync/rollup'
 
 export default {
   plugins: [
-    Starter({
-      /* options */
+    UnpluginAgentSync({
+      sourceFile: 'AGENTS.md',
+      agentFiles: ['CLAUDE.md', 'QWEN.md'],
+      watchMode: true
     })
   ]
 }
 ```
 
-<br></details>
+</details>
 
 <details>
 <summary>Webpack</summary><br>
@@ -72,13 +119,15 @@ module.exports = {
   /* ... */
   plugins: [
     require('unplugin-agent-sync/webpack')({
-      /* options */
+      sourceFile: 'AGENTS.md',
+      agentFiles: ['CLAUDE.md', 'QWEN.md'],
+      watchMode: true
     })
   ]
 }
 ```
 
-<br></details>
+</details>
 
 <details>
 <summary>Nuxt</summary><br>
@@ -90,34 +139,18 @@ export default defineNuxtConfig({
     [
       'unplugin-agent-sync/nuxt',
       {
-        /* options */
+        sourceFile: 'AGENTS.md',
+        agentFiles: ['CLAUDE.md', 'QWEN.md'],
+        watchMode: true
       }
     ]
   ]
 })
 ```
 
-> This module works for both Nuxt 2 and [Nuxt Vite](https://github.com/nuxt/vite)
+> 此模块支持 Nuxt 2 和 [Nuxt Vite](https://github.com/nuxt/vite)
 
-<br></details>
-
-<details>
-<summary>Vue CLI</summary><br>
-
-```ts
-// vue.config.js
-module.exports = {
-  configureWebpack: {
-    plugins: [
-      require('unplugin-agent-sync/webpack')({
-        /* options */
-      })
-    ]
-  }
-}
-```
-
-<br></details>
+</details>
 
 <details>
 <summary>esbuild</summary><br>
@@ -125,11 +158,50 @@ module.exports = {
 ```ts
 // esbuild.config.js
 import { build } from 'esbuild'
-import Starter from 'unplugin-agent-sync/esbuild'
+import UnpluginAgentSync from 'unplugin-agent-sync/esbuild'
 
 build({
-  plugins: [Starter()]
+  plugins: [
+    UnpluginAgentSync({
+      sourceFile: 'AGENTS.md',
+      agentFiles: ['CLAUDE.md', 'QWEN.md'],
+      watchMode: true
+    })
+  ]
 })
 ```
 
-<br></details>
+</details>
+
+## 开发和测试
+
+```bash
+# 开发模式
+pnpm run dev
+
+# 构建项目
+pnpm run build
+
+# 运行测试
+pnpm run test
+
+# 测试同步功能
+node test-sync.js
+
+# 启动监听模式演示
+node watch-demo.js
+```
+
+## 使用场景
+
+1. **多AI助手管理**：保持Claude、Qwen、GPT等助手的配置一致性
+2. **项目规范同步**：确保所有AI助手遵循相同的项目规范
+3. **配置文件维护**：减少手动维护多个相似配置的工作量
+4. **团队协作**：统一团队使用的AI助手配置标准
+
+## 注意事项
+
+- 确保源文件路径正确，相对于项目根目录
+- 目标文件如果不存在，会自动创建
+- 文件同步是完全覆盖式的，目标文件原有内容会被替换
+- 启用监听模式时，进程会持续运行直到手动停止
