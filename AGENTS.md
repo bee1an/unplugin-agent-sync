@@ -91,3 +91,7 @@ unplugin-agent-sync/
 
 - 非必要不要写测试
 - 非必要不要新建md文件
+
+## 修改README.md时
+
+需要保证中英文都同时修改

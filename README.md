@@ -20,9 +20,10 @@ An unplugin-based AI agent file synchronization tool for maintaining content con
 
 When you use multiple AI assistants (like Claude, Qwen, GPT, etc.), you typically need to maintain similar configuration files for each assistant. This plugin can:
 
-1. **Auto Sync**: Automatically update other AI agent files when `AGENTS.md` is modified
-2. **Real-time Monitoring**: Support file change monitoring without manual triggering
-3. **Flexible Configuration**: Specify any target file array
+1. **Auto Sync**: Automatically update other AI agent files when any monitored file is modified
+2. **Real-time Monitoring**: Support file change monitoring without manual triggering (enabled by default)
+3. **Flexible Configuration**: Specify any array of files to keep in sync
+4. **Bidirectional Sync**: Any file in the array can trigger sync to all other files
 
 ## Installation
 
@@ -40,9 +41,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 export default defineConfig({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md', // Source file
-      agentFiles: ['CLAUDE.md', 'QWEN.md'], // Target file array
-      watchMode: true // Enable auto monitoring
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md'] // Files to keep in sync
     })
   ]
 })
@@ -54,21 +53,18 @@ export default defineConfig({
 import UnpluginAgentSync from 'unplugin-agent-sync'
 
 const plugin = UnpluginAgentSync({
-  sourceFile: 'AGENTS.md',
-  agentFiles: ['CLAUDE.md', 'QWEN.md']
+  agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
 })
 
-// Manual sync execution
-await plugin.api.sync()
+// Manual sync execution (syncs from first file to all others)
+plugin.api.syncAll()
 ```
 
 ## Configuration Options
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `sourceFile` | `string` | `'AGENTS.md'` | Source file path, relative to project root |
-| `agentFiles` | `string[]` | `[]` | Array of target AI agent files to sync |
-| `watchMode` | `boolean` | `false` | Whether to enable automatic file change monitoring |
+| `agentFiles` | `string[]` | `['AGENTS.md', 'CLAUDE.md', 'QWEN.md']` | Array of AI agent files to keep in sync |
 
 ## Build Tool Integration
 
@@ -82,9 +78,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 export default defineConfig({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 })
@@ -102,9 +96,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/rollup'
 export default {
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 }
@@ -121,9 +113,7 @@ module.exports = {
   /* ... */
   plugins: [
     require('unplugin-agent-sync/webpack')({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 }
@@ -141,9 +131,7 @@ export default defineNuxtConfig({
     [
       'unplugin-agent-sync/nuxt',
       {
-        sourceFile: 'AGENTS.md',
-        agentFiles: ['CLAUDE.md', 'QWEN.md'],
-        watchMode: true
+        agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
       }
     ]
   ]
@@ -165,9 +153,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/esbuild'
 build({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 })

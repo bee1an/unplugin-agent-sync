@@ -20,9 +20,10 @@
 
 当您使用多个AI助手（如Claude、Qwen、GPT等）时，通常需要为每个助手维护相似的配置文件。本插件可以：
 
-1. **自动同步**：当`AGENTS.md`文件修改后，自动更新其他AI代理文件
-2. **实时监听**：支持文件变化监听，无需手动触发
-3. **灵活配置**：可以指定任意目标文件数组
+1. **自动同步**：当任何受监控的文件修改后，自动更新其他AI代理文件
+2. **实时监听**：支持文件变化监听，无需手动触发（默认启用）
+3. **灵活配置**：可以指定任意文件数组来保持同步
+4. **双向同步**：数组中的任何文件都可以触发同步到所有其他文件
 
 ## 安装
 
@@ -40,9 +41,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 export default defineConfig({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md', // 源文件
-      agentFiles: ['CLAUDE.md', 'QWEN.md'], // 目标文件数组
-      watchMode: true // 启用自动监听
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md'] // 保持同步的文件
     })
   ]
 })
@@ -54,21 +53,18 @@ export default defineConfig({
 import UnpluginAgentSync from 'unplugin-agent-sync'
 
 const plugin = UnpluginAgentSync({
-  sourceFile: 'AGENTS.md',
-  agentFiles: ['CLAUDE.md', 'QWEN.md']
+  agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
 })
 
-// 手动执行同步
-await plugin.api.sync()
+// 手动执行同步（从第一个文件同步到所有其他文件）
+plugin.api.syncAll()
 ```
 
 ## 配置选项
 
 | 选项 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `sourceFile` | `string` | `'AGENTS.md'` | 源文件路径，相对于项目根目录 |
-| `agentFiles` | `string[]` | `[]` | 需要同步的目标AI代理文件数组 |
-| `watchMode` | `boolean` | `false` | 是否启用自动监听文件变化 |
+| `agentFiles` | `string[]` | `['AGENTS.md', 'CLAUDE.md', 'QWEN.md']` | 需要保持同步的AI代理文件数组 |
 
 ## 构建工具集成
 
@@ -82,9 +78,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 export default defineConfig({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 })
@@ -102,9 +96,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/rollup'
 export default {
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 }
@@ -121,9 +113,7 @@ module.exports = {
   /* ... */
   plugins: [
     require('unplugin-agent-sync/webpack')({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 }
@@ -141,9 +131,7 @@ export default defineNuxtConfig({
     [
       'unplugin-agent-sync/nuxt',
       {
-        sourceFile: 'AGENTS.md',
-        agentFiles: ['CLAUDE.md', 'QWEN.md'],
-        watchMode: true
+        agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
       }
     ]
   ]
@@ -165,9 +153,7 @@ import UnpluginAgentSync from 'unplugin-agent-sync/esbuild'
 build({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md',
-      agentFiles: ['CLAUDE.md', 'QWEN.md'],
-      watchMode: true
+      agentFiles: ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
     })
   ]
 })
