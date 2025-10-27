@@ -2,35 +2,37 @@
 
 [![NPM version](https://img.shields.io/npm/v/unplugin-agent-sync?color=a1b858&label=)](https://www.npmjs.com/package/unplugin-agent-sync)
 
-一个基于unplugin的AI代理文件同步工具，用于在多个AI助手配置文件间保持内容一致。
+English | [简体中文](./README.zh-CN.md)
 
-## 功能特性
+An unplugin-based AI agent file synchronization tool for maintaining content consistency across multiple AI assistant configuration files.
 
-- 🔄 **文件同步**：自动将源文件内容同步到多个目标AI代理文件
-- 👀 **实时监听**：监听源文件变化，自动触发同步操作
-- 🔧 **灵活配置**：支持自定义源文件和目标文件数组
-- 🛠️ **多构建工具支持**：基于unplugin，支持Vite、Webpack、Rollup等
-- 📦 **TypeScript支持**：完整的类型定义和开发体验
+## Features
 
-## 核心功能
+- 🔄 **File Synchronization**: Automatically sync source file content to multiple target AI agent files
+- 👀 **Real-time Monitoring**: Monitor source file changes and automatically trigger sync operations
+- 🔧 **Flexible Configuration**: Support for custom source files and target file arrays
+- 🛠️ **Multi-build Tool Support**: Based on unplugin, supports Vite, Webpack, Rollup, and more
+- 📦 **TypeScript Support**: Complete type definitions and development experience
 
-### AI代理文件同步
+## Core Functionality
 
-当您使用多个AI助手（如Claude、Qwen、GPT等）时，通常需要为每个助手维护相似的配置文件。本插件可以：
+### AI Agent File Synchronization
 
-1. **自动同步**：当`AGENTS.md`文件修改后，自动更新其他AI代理文件
-2. **实时监听**：支持文件变化监听，无需手动触发
-3. **灵活配置**：可以指定任意目标文件数组
+When you use multiple AI assistants (like Claude, Qwen, GPT, etc.), you typically need to maintain similar configuration files for each assistant. This plugin can:
 
-## 安装
+1. **Auto Sync**: Automatically update other AI agent files when `AGENTS.md` is modified
+2. **Real-time Monitoring**: Support file change monitoring without manual triggering
+3. **Flexible Configuration**: Specify any target file array
+
+## Installation
 
 ```bash
 npm i unplugin-agent-sync
 ```
 
-## 快速开始
+## Quick Start
 
-### 基本使用
+### Basic Usage
 
 ```typescript
 import UnpluginAgentSync from 'unplugin-agent-sync/vite'
@@ -38,15 +40,15 @@ import UnpluginAgentSync from 'unplugin-agent-sync/vite'
 export default defineConfig({
   plugins: [
     UnpluginAgentSync({
-      sourceFile: 'AGENTS.md', // 源文件
-      agentFiles: ['CLAUDE.md', 'QWEN.md'], // 目标文件数组
-      watchMode: true // 启用自动监听
+      sourceFile: 'AGENTS.md', // Source file
+      agentFiles: ['CLAUDE.md', 'QWEN.md'], // Target file array
+      watchMode: true // Enable auto monitoring
     })
   ]
 })
 ```
 
-### 手动同步
+### Manual Sync
 
 ```typescript
 import UnpluginAgentSync from 'unplugin-agent-sync'
@@ -56,19 +58,19 @@ const plugin = UnpluginAgentSync({
   agentFiles: ['CLAUDE.md', 'QWEN.md']
 })
 
-// 手动执行同步
+// Manual sync execution
 await plugin.api.sync()
 ```
 
-## 配置选项
+## Configuration Options
 
-| 选项 | 类型 | 默认值 | 说明 |
-|------|------|--------|------|
-| `sourceFile` | `string` | `'AGENTS.md'` | 源文件路径，相对于项目根目录 |
-| `agentFiles` | `string[]` | `[]` | 需要同步的目标AI代理文件数组 |
-| `watchMode` | `boolean` | `false` | 是否启用自动监听文件变化 |
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `sourceFile` | `string` | `'AGENTS.md'` | Source file path, relative to project root |
+| `agentFiles` | `string[]` | `[]` | Array of target AI agent files to sync |
+| `watchMode` | `boolean` | `false` | Whether to enable automatic file change monitoring |
 
-## 构建工具集成
+## Build Tool Integration
 
 <details>
 <summary>Vite</summary><br>
@@ -148,7 +150,7 @@ export default defineNuxtConfig({
 })
 ```
 
-> 此模块支持 Nuxt 2 和 [Nuxt Vite](https://github.com/nuxt/vite)
+> This module supports Nuxt 2 and [Nuxt Vite](https://github.com/nuxt/vite)
 
 </details>
 
@@ -173,35 +175,35 @@ build({
 
 </details>
 
-## 开发和测试
+## Development and Testing
 
 ```bash
-# 开发模式
+# Development mode
 pnpm run dev
 
-# 构建项目
+# Build project
 pnpm run build
 
-# 运行测试
+# Run tests
 pnpm run test
 
-# 测试同步功能
+# Test sync functionality
 node test-sync.js
 
-# 启动监听模式演示
+# Start watch mode demo
 node watch-demo.js
 ```
 
-## 使用场景
+## Use Cases
 
-1. **多AI助手管理**：保持Claude、Qwen、GPT等助手的配置一致性
-2. **项目规范同步**：确保所有AI助手遵循相同的项目规范
-3. **配置文件维护**：减少手动维护多个相似配置的工作量
-4. **团队协作**：统一团队使用的AI助手配置标准
+1. **Multi-AI Assistant Management**: Maintain configuration consistency across Claude, Qwen, GPT, and other assistants
+2. **Project Standard Synchronization**: Ensure all AI assistants follow the same project standards
+3. **Configuration File Maintenance**: Reduce the workload of manually maintaining multiple similar configurations
+4. **Team Collaboration**: Unify AI assistant configuration standards used by the team
 
-## 注意事项
+## Notes
 
-- 确保源文件路径正确，相对于项目根目录
-- 目标文件如果不存在，会自动创建
-- 文件同步是完全覆盖式的，目标文件原有内容会被替换
-- 启用监听模式时，进程会持续运行直到手动停止
+- Ensure the source file path is correct, relative to the project root
+- Target files will be automatically created if they don't exist
+- File synchronization is completely overwriting; original content in target files will be replaced
+- When watch mode is enabled, the process will continue running until manually stopped

@@ -21,14 +21,12 @@ export const DEFAULT_AGENT_FILES = ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
 async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<void> {
   // 如果正在同步中，跳过以避免死循环
   if (isSyncing) {
-    console.log(`[unplugin-agent-sync] 正在同步中，跳过文件变化: ${changedFile}`)
     return
   }
 
   // 检查是否在短时间内已经同步过
   const now = Date.now()
   if (now - lastSyncTime < SYNC_DELAY) {
-    console.log(`[unplugin-agent-sync] 同步间隔过短，跳过文件变化: ${changedFile}`)
     return
   }
 
@@ -39,12 +37,12 @@ async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<v
     // 读取变化的文件内容
     const changedPath = resolve(process.cwd(), changedFile)
     if (!existsSync(changedPath)) {
-      console.warn(`[unplugin-agent-sync] 文件不存在: ${changedPath}`)
+      console.warn(`[unplugin-agent-sync] File not found: ${changedPath}`)
       return
     }
 
     const changedContent = await readFile(changedPath, 'utf-8')
-    console.log(`[unplugin-agent-sync] 检测到文件变化: ${changedPath}`)
+    console.log(`[unplugin-agent-sync] File changed: ${changedPath}`)
 
     // 同步到其他所有文件
     for (const targetFile of allFiles) {
@@ -55,15 +53,15 @@ async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<v
       const targetPath = resolve(process.cwd(), targetFile)
       try {
         await writeFile(targetPath, changedContent, 'utf-8')
-        console.log(`[unplugin-agent-sync] 已同步内容到: ${targetPath}`)
+        console.log(`[unplugin-agent-sync] Synced content to: ${targetPath}`)
       }
       catch (error) {
-        console.error(`[unplugin-agent-sync] 写入文件失败 ${targetPath}:`, error)
+        console.error(`[unplugin-agent-sync] Failed to write file ${targetPath}:`, error)
       }
     }
   }
   catch (error) {
-    console.error(`[unplugin-agent-sync] 同步文件失败:`, error)
+    console.error(`[unplugin-agent-sync] Failed to sync files:`, error)
   }
   finally {
     // 稍微延迟后重置同步标志
@@ -86,22 +84,21 @@ function setupFileWatchers(agentFiles: string[]): void {
       existingFiles.push(file)
     }
     else {
-      console.warn(`[unplugin-agent-sync] 文件不存在: ${filePath}`)
+      console.warn(`[unplugin-agent-sync] File not found: ${filePath}`)
     }
   }
 
   if (existingFiles.length === 0) {
-    console.warn('[unplugin-agent-sync] 没有找到任何存在的文件')
+    console.warn('[unplugin-agent-sync] No existing files found')
     return
   }
 
   // 如果只有一个文件，不需要同步
   if (existingFiles.length === 1) {
-    console.log(`[unplugin-agent-sync] 只有一个文件 ${existingFiles[0]}，无需同步`)
     return
   }
 
-  console.log(`[unplugin-agent-sync] 开始监听以下文件的同步: ${existingFiles.join(', ')}`)
+  console.log(`[unplugin-agent-sync] Started monitoring files: ${existingFiles.join(', ')}`)
 
   // 为每个文件设置监听器
   const watchers: any[] = []
@@ -118,7 +115,7 @@ function setupFileWatchers(agentFiles: string[]): void {
   // 优雅关闭处理
   process.on('SIGINT', () => {
     watchers.forEach(watcher => watcher.close())
-    console.log('[unplugin-agent-sync] 文件监听已停止')
+    console.log('[unplugin-agent-sync] File monitoring stopped')
     process.exit(0)
   })
 }
