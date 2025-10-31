@@ -36,6 +36,21 @@ export default defineConfig({
 |------|------|--------|------|
 | `agentFiles` | `string[]` | `['AGENTS.md', 'CLAUDE.md', 'QWEN.md']` | 需要保持同步的文件数组 |
 
+## VSCode 配置推荐
+
+为了在VSCode中获得更好的文件组织体验，建议在你的工作区或用户设置中添加以下配置：
+
+```json
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "AGENTS.md": "CLAUDE.md, QWEN.md, GEMINI.md, WARP.md"
+  }
+}
+```
+
+这个配置会将AI代理配置文件在文件资源管理器中嵌套显示在AGENTS.md下，让它们更容易管理。
+
 ## 注意事项
 
 - 同步是双向的 - 任何文件都可以触发同步到其他文件

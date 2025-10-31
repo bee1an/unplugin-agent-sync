@@ -36,6 +36,21 @@ export default defineConfig({
 |--------|------|---------|-------------|
 | `agentFiles` | `string[]` | `['AGENTS.md', 'CLAUDE.md', 'QWEN.md']` | Files to keep in sync |
 
+## VSCode Configuration
+
+For better file organization in VSCode, it's recommended to add the following configuration to your workspace or user settings:
+
+```json
+{
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "AGENTS.md": "CLAUDE.md, QWEN.md, GEMINI.md, WARP.md"
+  }
+}
+```
+
+This will group the AI agent configuration files under AGENTS.md in the file explorer, making them easier to manage.
+
 ## Notes
 
 - Sync is bidirectional - any file can trigger sync to others

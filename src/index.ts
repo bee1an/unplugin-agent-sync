@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { UnpluginFactory } from 'unplugin'
 import type { Options } from './types'
 import { existsSync, watch } from 'node:fs'
@@ -42,12 +41,10 @@ async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<v
     // 读取变化的文件内容
     const changedPath = resolve(process.cwd(), changedFile)
     if (!existsSync(changedPath)) {
-      console.warn(`[unplugin-agent-sync] File not found: ${changedPath}`)
       return
     }
 
     const changedContent = await readFile(changedPath, 'utf-8')
-    console.log(`[unplugin-agent-sync] File changed: ${changedPath}`)
 
     // 同步到其他所有文件
     for (const targetFile of allFiles) {
@@ -56,17 +53,8 @@ async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<v
       }
 
       const targetPath = resolve(process.cwd(), targetFile)
-      try {
-        await writeFile(targetPath, changedContent, 'utf-8')
-        console.log(`[unplugin-agent-sync] Synced content to: ${targetPath}`)
-      }
-      catch (error) {
-        console.error(`[unplugin-agent-sync] Failed to write file ${targetPath}:`, error)
-      }
+      await writeFile(targetPath, changedContent, 'utf-8')
     }
-  }
-  catch (error) {
-    console.error(`[unplugin-agent-sync] Failed to sync files:`, error)
   }
   finally {
     // 稍微延迟后重置同步标志
@@ -81,7 +69,6 @@ async function syncFileToAll(changedFile: string, allFiles: string[]): Promise<v
  */
 function startFileWatchers(agentFiles: string[]): void {
   if (isWatching) {
-    console.log('[unplugin-agent-sync] File monitoring already started')
     return
   }
 
@@ -92,23 +79,16 @@ function startFileWatchers(agentFiles: string[]): void {
     if (existsSync(filePath)) {
       existingFiles.push(file)
     }
-    else {
-      console.warn(`[unplugin-agent-sync] File not found: ${filePath}`)
-    }
   }
 
   if (existingFiles.length === 0) {
-    console.warn('[unplugin-agent-sync] No existing files found')
     return
   }
 
   // 如果只有一个文件，不需要同步
   if (existingFiles.length === 1) {
-    console.log(`[unplugin-agent-sync] Only one file found: ${existingFiles[0]}, no sync needed`)
     return
   }
-
-  console.log(`[unplugin-agent-sync] Starting file monitoring: ${existingFiles.join(', ')}`)
 
   // 为每个文件设置监听器
   watchers = []
@@ -123,7 +103,6 @@ function startFileWatchers(agentFiles: string[]): void {
   }
 
   isWatching = true
-  console.log('[unplugin-agent-sync] File monitoring started')
 }
 
 /**
@@ -134,23 +113,14 @@ function stopFileWatchers(): void {
     return
   }
 
-  console.log('[unplugin-agent-sync] Stopping file monitoring...')
-
   // 关闭所有监听器
   watchers.forEach((watcher) => {
-    try {
-      watcher.close()
-    }
-    catch (error) {
-      console.error('[unplugin-agent-sync] Error closing watcher:', error)
-    }
+    watcher.close()
   })
 
   watchers = []
   existingFiles = []
   isWatching = false
-
-  console.log('[unplugin-agent-sync] File monitoring stopped')
 }
 
 /**
