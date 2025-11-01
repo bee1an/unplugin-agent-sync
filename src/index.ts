@@ -12,7 +12,7 @@ let lastSyncTime = 0
 const SYNC_DELAY = 100 // 同步延迟，避免快速连续变化导致的死循环
 
 // 默认同步文件列表
-export const DEFAULT_AGENT_FILES = ['AGENTS.md', 'CLAUDE.md', 'QWEN.md']
+export const DEFAULT_AGENT_FILES = ['AGENTS.md', 'GEMINI.md', 'CLAUDE.md', 'QWEN.md']
 
 // 文件监听器管理
 let watchers: any[] = []
